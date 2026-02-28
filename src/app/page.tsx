@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { Heart, MessageCircle, Send, Bookmark } from 'lucide-react';
 import { UploadDropzone } from '@/lib/uploadthing';
 import type { OurFileRouter } from '@/lib/uploadthing/core';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface Post {
   id: number;
@@ -196,7 +198,39 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-8">
+    <>
+      {/* Header with Logo */}
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <Image
+                src="/logo.png"
+                alt="School Logo"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
+              <span className="hidden sm:block text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
+                UniNetwork
+              </span>
+            </Link>
+
+            {currentUserName && (
+              <div className="flex items-center gap-4">
+                <span className="hidden sm:block text-sm text-gray-600">
+                  {currentUserName}
+                </span>
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-teal-600 flex items-center justify-center text-white font-bold">
+                  {currentUserName.charAt(0).toUpperCase()}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <div className="space-y-8">
       {/* POST CREATION CARD */}
       <div className="bg-white/90 backdrop-blur-sm border border-white/20 rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300">
         <div className="flex space-x-6">
@@ -468,5 +502,6 @@ export default function Home() {
         )}
       </div>
     </div>
+    </>
   );
 }

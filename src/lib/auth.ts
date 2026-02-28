@@ -12,6 +12,9 @@ export interface User {
   major: string;
   bio?: string;
   avatarUrl?: string;
+  coverUrl?: string;
+  role: 'STUDENT' | 'ADMIN';
+  isActive: boolean;
   createdAt: Date;
 }
 
@@ -34,9 +37,16 @@ export async function getSession(): Promise<User | null> {
         major: true,
         bio: true,
         avatarUrl: true,
+        coverUrl: true,
+        role: true,
+        isActive: true,
         createdAt: true,
       },
     });
+
+    if (!user || !user.isActive) {
+      return null;
+    }
 
     return user;
   } catch (error) {
@@ -50,6 +60,7 @@ export async function createSession(userId: number): Promise<void> {
   cookieStore.set('session', userId.toString(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7, // 7 days
     path: '/',
   });
@@ -66,4 +77,15 @@ export async function verifyPassword(password: string, hashedPassword: string): 
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
+}
+
+/**
+ * Check if a user has admin role
+ */
+export async function isAdmin(userId: number): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  });
+  return user?.role === 'ADMIN' ?? false;
 }

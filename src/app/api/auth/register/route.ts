@@ -1,29 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { hashPassword } from '@/lib/auth';
+import { registerSchema } from '@/lib/validations';
+import { hashPassword, createSession } from '@/lib/auth';
+import { handleApiError, json } from '@/lib/api-helpers';
+import { errors } from '@/lib/errors';
 
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, studentId, major, password } = await request.json();
-
-    if (!name || !email || !studentId || !major || !password) {
-      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
-    }
+    // Parse and validate input with Zod
+    const body = await request.json();
+    const { name, email, password, studentId, major } = registerSchema.parse(body);
 
     // Check if user already exists
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
-          { email },
+          { email: email.toLowerCase() },
           { studentId },
         ],
       },
     });
 
     if (existingUser) {
-      return NextResponse.json({ error: 'User with this email or student ID already exists' }, { status: 409 });
+      throw errors.conflict(
+        existingUser.email === email.toLowerCase()
+          ? 'Email already registered'
+          : 'Student ID already registered'
+      );
     }
 
     const hashedPassword = await hashPassword(password);
@@ -31,16 +36,18 @@ export async function POST(request: NextRequest) {
     const user = await prisma.user.create({
       data: {
         name,
-        email,
+        email: email.toLowerCase(),
         studentId,
         major,
         password: hashedPassword,
       },
     });
 
-    return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
+    // Auto-login after registration
+    await createSession(user.id);
+
+    return json({ success: true, userId: user.id, message: 'Account created successfully' }, 201);
   } catch (error) {
-    console.error('Registration error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return handleApiError(error);
   }
 }
