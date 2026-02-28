@@ -1,38 +1,31 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { json } from '@/lib/api-helpers';
+import { errors } from '@/lib/errors';
 
 export async function GET() {
   try {
     const session = await getSession();
-    
+
     if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      throw errors.unauthorized();
     }
 
-    const user = await prisma.user.findUnique({
-      where: {
+    return json({
+      user: {
         id: session.id,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        major: true,
-        studentId: true,
-        avatarUrl: true,
+        name: session.name,
+        email: session.email,
+        studentId: session.studentId,
+        major: session.major,
+        bio: session.bio,
+        avatarUrl: session.avatarUrl,
+        coverUrl: session.coverUrl,
+        role: session.role,
+        createdAt: session.createdAt,
       },
     });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(user);
   } catch (error) {
-    console.error('Error fetching user data:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 }
