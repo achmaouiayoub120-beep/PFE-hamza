@@ -1,24 +1,24 @@
 import "./globals.css";
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import Sidebar from "@/components/Sidebar";
+import RightPanel from "@/components/RightPanel";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { uploadRouter } from "@/lib/uploadthing/core";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Réseau Social Universitaire",
-  description: "Connectez-vous avec vos camarades et partagez votre expérience universitaire",
+  title: "UniSocial - Reseau Social Universitaire",
+  description: "Connectez-vous avec vos camarades et partagez votre experience universitaire",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8fafb" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c1829" },
+  ],
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -27,28 +27,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <NextSSRPlugin routerConfig={extractRouterConfig(uploadRouter)} />
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
-          <div className="max-w-6xl mx-auto grid grid-cols-12 gap-8 p-8">
-            {/* Left: Sidebar Navigation */}
-            <div className="col-span-3">
-              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl shadow-xl p-6 sticky top-8">
-                <Sidebar />
-              </div>
-            </div>
-            
-            {/* Center: Main Feed */}
-            <div className="col-span-9">
-              <div className="max-w-4xl mx-auto">
+    <html lang="fr" suppressHydrationWarning>
+      <body className="font-sans antialiased bg-background text-foreground">
+        <ThemeProvider>
+          <NextSSRPlugin routerConfig={extractRouterConfig(uploadRouter)} />
+          <div className="min-h-screen bg-background">
+            <div className="max-w-[1360px] mx-auto flex gap-6 px-4 lg:px-6 py-6">
+              {/* Left Sidebar */}
+              <aside className="hidden md:block w-[240px] flex-shrink-0">
+                <div className="sticky top-6 card-elevated p-4 h-[calc(100vh-48px)] overflow-y-auto">
+                  <Sidebar />
+                </div>
+              </aside>
+
+              {/* Center Content */}
+              <main className="flex-1 min-w-0">
                 {children}
-              </div>
+              </main>
+
+              {/* Right Panel */}
+              <aside className="hidden lg:block w-[280px] flex-shrink-0">
+                <div className="sticky top-6 overflow-y-auto max-h-[calc(100vh-48px)] pr-1">
+                  <RightPanel />
+                </div>
+              </aside>
             </div>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   );
