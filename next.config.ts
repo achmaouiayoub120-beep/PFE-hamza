@@ -2,13 +2,18 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  output: 'export',
-  trailingSlash: true,
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'api.dicebear.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'utfs.io',
+      },
+    ],
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/PFE_2nd_try' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/PFE_2nd_try' : '',
 };
 
 export default nextConfig;

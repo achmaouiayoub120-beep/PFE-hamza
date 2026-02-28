@@ -2,96 +2,127 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, User, Users, Settings, LogOut, Search } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Home, User, Users, Settings, LogOut, Search, Bell, Sun, Moon } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
 
 const navigation = [
   { name: 'Fil', href: '/', icon: Home },
   { name: 'Profil', href: '/profile/me', icon: User },
   { name: 'Camarades', href: '/classmates', icon: Users },
-  { name: 'Paramètres', href: '/settings', icon: Settings },
-  { name: 'Déconnexion', href: '#', icon: LogOut, isLogout: true },
+  { name: 'Notifications', href: '#', icon: Bell },
+  { name: 'Parametres', href: '/settings', icon: Settings },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      window.location.href = '/register';
+      window.location.href = '/login';
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
 
-  const handleSearch = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      const searchValue = (e.target as HTMLInputElement).value.trim();
-      if (searchValue) {
-        window.location.href = `/?q=${encodeURIComponent(searchValue)}`;
+      const val = (e.target as HTMLInputElement).value.trim();
+      if (val) {
+        window.location.href = `/?q=${encodeURIComponent(val)}`;
       }
     }
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-full flex flex-col">
       {/* Logo */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          UniSocial
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">Réseau Universitaire</p>
+        <Link href="/" className="flex items-center gap-3 group">
+          <img
+            src="/images/university-logo.png"
+            alt="Logo Universite"
+            className="h-10 w-10 object-contain transition-transform duration-200 group-hover:scale-105"
+            crossOrigin="anonymous"
+          />
+          <div>
+            <h1 className="text-lg font-bold text-foreground">UniSocial</h1>
+            <p className="text-[11px] text-muted-foreground leading-none">Reseau Universitaire</p>
+          </div>
+        </Link>
       </div>
-      
-      {/* Search Bar */}
-      <div className="mb-8">
+
+      {/* Search */}
+      <div className="mb-6">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Rechercher..."
-            className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border-0 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all duration-200 shadow-sm hover:shadow-md"
+            className="w-full pl-10 pr-3 py-2.5 bg-muted border border-transparent rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:bg-card focus:shadow-sm transition-all duration-200"
             onKeyDown={handleSearch}
           />
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="space-y-1 flex-1">
+      <nav className="flex-1 space-y-1">
         {navigation.map((item) => {
-          const isActive = pathname === item.href || (item.name === 'Profil' && pathname.startsWith('/profile/'));
-          
-          if (item.isLogout) {
-            return (
-              <button
-                key={item.name}
-                onClick={handleLogout}
-                className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-200 group mb-2"
-              >
-                <item.icon className="mr-3 h-5 w-5 group-hover:text-red-700" />
-                {item.name}
-              </button>
-            );
-          }
-          
+          const isActive = pathname === item.href ||
+            (item.name === 'Profil' && pathname.startsWith('/profile/'));
+
           return (
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all duration-200 ${
+              className={`relative flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${
                 isActive
-                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg transform scale-105'
-                  : 'text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:text-indigo-700'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
-              <item.icon className="mr-3 h-5 w-5" />
-              {item.name}
+              {isActive && (
+                <motion.div
+                  layoutId="sidebar-active"
+                  className="absolute inset-0 bg-primary rounded-xl"
+                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  style={{ zIndex: -1 }}
+                />
+              )}
+              <item.icon className="h-[18px] w-[18px]" />
+              <span>{item.name}</span>
+              {item.name === 'Notifications' && (
+                <span className="ml-auto w-5 h-5 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                  3
+                </span>
+              )}
             </Link>
           );
         })}
       </nav>
 
+      {/* Bottom Actions */}
+      <div className="pt-4 mt-4 border-t border-border space-y-1">
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-all duration-200"
+        >
+          {theme === 'light' ? <Moon className="h-[18px] w-[18px]" /> : <Sun className="h-[18px] w-[18px]" />}
+          <span>{theme === 'light' ? 'Mode sombre' : 'Mode clair'}</span>
+        </button>
 
+        {/* Logout */}
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-xl transition-all duration-200"
+        >
+          <LogOut className="h-[18px] w-[18px]" />
+          <span>Deconnexion</span>
+        </button>
+      </div>
     </div>
   );
 }
