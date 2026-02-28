@@ -6,32 +6,40 @@
 
 @layer base {
   :root {
-    /* Light mode colors */
+    /* Light mode colors - School logo inspired */
     --background: #ffffff;
-    --foreground: #1a1f36;
-    --secondary-bg: #f8fafb;
-    --tertiary-bg: #eef1f5;
-    --border: #dfe4ec;
+    --foreground: #1a2332;
+    --secondary-bg: #f5f7f9;
+    --tertiary-bg: #eceff3;
+    --border: #dce3eb;
     
-    /* Primary brand colors */
-    --primary: #0066ff;
-    --primary-light: #4da6ff;
-    --primary-dark: #0052cc;
+    /* School logo primary colors */
+    --primary: #0099d8;      /* Blue from logo */
+    --primary-light: #40b8e8;
+    --primary-dark: #006ba3;
     
-    /* Accent colors */
-    --accent: #00d4ff;
-    --accent-light: #33e0ff;
+    /* Logo accent colors */
+    --accent: #2d8f3f;       /* Green from logo */
+    --accent-light: #4ca65f;
+    --accent-dark: #1f6630;
+    
+    /* Logo secondary accent */
+    --secondary: #dc143c;    /* Red from logo */
+    --secondary-light: #e74c6d;
+    
+    /* Logo warm color */
+    --warm: #8b5a3c;         /* Brown from logo */
     
     /* Status colors */
-    --success: #10b981;
+    --success: #2d8f3f;
     --warning: #f59e0b;
-    --error: #ef4444;
-    --info: #3b82f6;
+    --error: #dc143c;
+    --info: #0099d8;
     
     /* Text colors */
-    --text-primary: #1a1f36;
-    --text-secondary: #6b7280;
-    --text-tertiary: #9ca3af;
+    --text-primary: #1a2332;
+    --text-secondary: #5f6b7b;
+    --text-tertiary: #8b94a3;
     
     /* Neutral grays */
     --gray-50: #f9fafb;
@@ -48,22 +56,28 @@
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --background: #0f1419;
-      --foreground: #e8eaed;
-      --secondary-bg: #1a1f2e;
-      --tertiary-bg: #252d3d;
-      --border: #3a424f;
+      --background: #0d1117;
+      --foreground: #e6edf3;
+      --secondary-bg: #161b22;
+      --tertiary-bg: #21262d;
+      --border: #30363d;
       
-      --primary: #4da6ff;
-      --primary-light: #99d9ff;
-      --primary-dark: #0052cc;
+      --primary: #40b8e8;
+      --primary-light: #79d3f5;
+      --primary-dark: #006ba3;
       
-      --accent: #00d4ff;
-      --accent-light: #33e0ff;
+      --accent: #4ca65f;
+      --accent-light: #7bc86e;
+      --accent-dark: #1f6630;
       
-      --text-primary: #e8eaed;
-      --text-secondary: #b0b4ba;
-      --text-tertiary: #8a8e95;
+      --secondary: #e74c6d;
+      --secondary-light: #f06d93;
+      
+      --warm: #a87a5a;
+      
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-tertiary: #6e7681;
     }
   }
   
@@ -131,7 +145,7 @@
   
   /* Button styles */
   .btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     color: white;
     font-weight: 600;
     padding: 0.75rem 1.5rem;
@@ -143,7 +157,7 @@
   
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 102, 255, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 153, 216, 0.3);
   }
   
   .btn-primary:active {
@@ -163,7 +177,7 @@
   
   .btn-secondary:hover {
     background-color: var(--tertiary-bg);
-    border-color: var(--primary-light);
+    border-color: var(--primary);
   }
   
   /* Input styles */

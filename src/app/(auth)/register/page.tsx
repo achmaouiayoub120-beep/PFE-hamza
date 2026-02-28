@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle2 } from 'lucide-react';
+import Image from 'next/image';
+import { CheckCircle2, Mail, Lock, User, Briefcase, ID } from 'lucide-react';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -81,30 +82,49 @@ export default function RegisterPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-teal-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
       <div className="w-full max-w-2xl">
-        <div className="mb-8">
-          <div className="inline-flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center font-bold text-white">
-              U
+        {/* Header with Logo */}
+        <div className="mb-8 text-center lg:text-left">
+          <div className="flex justify-center lg:justify-start items-center gap-3 mb-6">
+            <Image
+              src="/logo.png"
+              alt="School Logo"
+              width={56}
+              height={56}
+              className="object-contain"
+            />
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
+                UniNetwork
+              </h1>
+              <p className="text-xs text-gray-500 font-medium">University Community</p>
             </div>
-            <span className="text-2xl font-bold text-slate-900">UniNetwork</span>
           </div>
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Join the Community</h1>
-          <p className="text-lg text-slate-600">Create your account to connect with classmates and share your university experience</p>
+          <h2 className="text-4xl font-bold text-gray-900 mb-2">Join the Community</h2>
+          <p className="text-lg text-gray-600">Create your account to connect with classmates and share your university experience</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
           <div className="grid lg:grid-cols-2 gap-0">
             {/* Left side - Features */}
-            <div className="hidden lg:block bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 relative overflow-hidden">
+            <div className="hidden lg:block bg-gradient-to-br from-blue-600 via-teal-600 to-blue-700 p-8 relative overflow-hidden">
               <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
+                <div className="absolute -top-40 -right-40 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-green-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
               </div>
 
               <div className="relative z-10">
-                <h2 className="text-2xl font-bold text-white mb-8">Why Join Us?</h2>
+                <div className="flex justify-center mb-8">
+                  <Image
+                    src="/logo.png"
+                    alt="School Logo"
+                    width={100}
+                    height={100}
+                    className="object-contain drop-shadow-lg"
+                  />
+                </div>
+                <h2 className="text-2xl font-bold text-white mb-8 text-center">Why Join Us?</h2>
                 <div className="space-y-6">
                   {[
                     'Connect with classmates and make new friends',
@@ -113,8 +133,8 @@ export default function RegisterPage() {
                     'Build your professional network',
                   ].map((benefit, idx) => (
                     <div key={idx} className="flex gap-3 items-start">
-                      <CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-1" />
-                      <span className="text-slate-300">{benefit}</span>
+                      <CheckCircle2 className="w-5 h-5 text-white/80 flex-shrink-0 mt-1" />
+                      <span className="text-blue-50">{benefit}</span>
                     </div>
                   ))}
                 </div>
@@ -132,114 +152,132 @@ export default function RegisterPage() {
 
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                       Full Name
                     </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="John Doe"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
+                    <div className="relative">
+                      <User className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="John Doe"
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                       Email Address
                     </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="you@university.edu"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="you@university.edu"
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="studentId" className="block text-sm font-medium text-slate-700 mb-2">
+                    <label htmlFor="studentId" className="block text-sm font-medium text-gray-700 mb-2">
                       Student ID
                     </label>
-                    <input
-                      id="studentId"
-                      name="studentId"
-                      type="text"
-                      required
-                      value={formData.studentId}
-                      onChange={handleChange}
-                      placeholder="STU123456"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
+                    <div className="relative">
+                      <ID className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
+                      <input
+                        id="studentId"
+                        name="studentId"
+                        type="text"
+                        required
+                        value={formData.studentId}
+                        onChange={handleChange}
+                        placeholder="STU123456"
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <label htmlFor="major" className="block text-sm font-medium text-slate-700 mb-2">
+                    <label htmlFor="major" className="block text-sm font-medium text-gray-700 mb-2">
                       Major
                     </label>
-                    <select
-                      id="major"
-                      name="major"
-                      required
-                      value={formData.major}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    >
-                      <option value="">Select your major</option>
-                      {majors.map((m) => (
-                        <option key={m} value={m}>{m}</option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <Briefcase className="absolute left-3 top-3.5 w-5 h-5 text-gray-400 pointer-events-none z-10" />
+                      <select
+                        id="major"
+                        name="major"
+                        required
+                        value={formData.major}
+                        onChange={handleChange}
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none"
+                      >
+                        <option value="">Select your major</option>
+                        {majors.map((m) => (
+                          <option key={m} value={m}>{m}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                       Password
                     </label>
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      required
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="••••••••"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="••••••••"
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-2">
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                       Confirm Password
                     </label>
-                    <input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      required
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      placeholder="••••••••"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
+                      <input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        required
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="••••••••"
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
+                  className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-semibold rounded-lg hover:shadow-lg hover:from-blue-700 hover:to-teal-700 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform hover:-translate-y-0.5 active:translate-y-0"
                 >
                   {isLoading ? (
                     <span className="flex items-center justify-center gap-2">
